@@ -1,0 +1,74 @@
+# === C/C++ build outputs ===
+*.exe
+*.obj
+*.ilk
+*.pdb
+*.idb
+*.lib
+*.dll
+*.exp
+
+# === Assembly ===
+*.asm
+!test.asm   # păstrează test.asm (fișier sursă)
+
+# === VS Code workspace ===
+.vscode/
+
+# === Temporary/system files ===
+*.log
+*.tmp
+*.cache
+*.user
+*.db
+*.opendb
+*.VC.db
+*.VC.opendb
+
+# === Build folders ===
+/Debug/
+/Release/
+/x64/
+/build/
+/out/
+
+# === Vivado project files ===
+*.jou
+*.log
+*.str
+*.xpr
+*.xml
+*.html
+*.runs
+*.rpt
+*.dcp
+*.bit
+*.bin
+*.xsa
+*.xci
+*.xdc
+*.ip_user_files
+*.sim
+*.cache
+*.hw
+*.sdk
+*.vivado
+
+# === Vivado project folders ===
+uP.cache/
+uP.hw/
+uP.ip_user_files/
+uP.sim/
+*.runs/
+*.gen/
+*.srcs/
+*.sim/
+*.ip_user_files/
+*.cache/
+*.hw/
+
+# === Keep your source folders and code ===
+!uP.srcs
+!main.cpp
+!test.asm
+!*.sv
