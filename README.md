@@ -1,99 +1,63 @@
-> **Implementare de Basic Computer în SystemVerilog, cu assembler scris în C++.** > Assemblerul convertește codul sursă `.asm` în fișier `.hex` (Machine Code) pentru simularea din Vivado.
+# Basic Computer Architecture & Assembler
 
 ---
 
-## Structura Proiectului
+## Română
 
-```text
-├── assembler/
-│   ├── main.cpp            # Sursa C++ pentru assembler
-│   └── test.asm            # Fișier de test (Assembly code)
-│
-└── vivado/
-    ├── uP.xpr              # Proiectul Xilinx Vivado
-    ├── uP.srcs/
-    │   ├── sim_1/new/
-    │   │   └── testbench.sv        # Testbench principal
-    │   └── sources_1/new/
-    │       ├── processor.sv        # Top Module
-    │       ├── control_block.sv    # Unitatea de control
-    │       ├── alu.sv              # Arithmetic Logic Unit
-    │       ├── register_file.sv    # Blocul de regiștri
-    │       ├── instr_mem.sv        # Memoria de instrucțiuni
-    │       ├── data_mem.sv         # Memoria de date
-    │       ├── pc.sv               # Program Counter
-    │       └── ... (mux.sv, ralu.sv, reg_zero_flag.sv)
-    │
-    └── uP.sim/.../testbench.hex    # Fișierul generat automat de assembler
-```
+### 📖 Descriere
+Proiectul constă într-o microarhitectură de procesor implementată în **SystemVerilog**, împreună cu un **Assembler scris în C++**. Acesta traduce codul sursă din limbaj de asamblare (`.asm`) în cod mașină (`.hex`) pentru simularea în Vivado.
 
----
+### 🛠️ Structura Proiectului
+* **assembler/**: Conține `main.cpp` (codul sursă al translatorului) și `test.asm`.
+* **vivado/**: Conține fișierele SystemVerilog (`alu.sv`, `control_block.sv`, `processor.sv` etc.) și proiectul Xilinx.
 
-## Assembler (C++)
-
-Assemblerul este scris în **C++17** și are rolul de a traduce instrucțiunile mnemonice în cod mașină hexazecimal pe care procesorul îl poate executa.
-
-### Funcționalități:
-* ✅ **Curățare:** Elimină automat comentariile (`;`) și spațiile inutile.
-* ✅ **Etichete:** Identifică și gestionează etichete (labels) pentru salturi.
-* ✅ **Traducere:** Convertește instrucțiunile (ADD, SUB, JMP, etc.) în cod mașină.
-* ✅ **Output:** Generează fișierul `.hex` pe 32 de biți pentru Vivado (`readmemh`).
-
-### Formatul Instrucțiunii (32-bit)
-
+### 📑 Formatul Instrucțiunii (32-bit)
 | Opcode (4b) | Dest (4b) | Op0 (4b) | Op1 (4b) | Value (16b) |
 | :---: | :---: | :---: | :---: | :---: |
 | `[31:28]` | `[27:24]` | `[23:20]` | `[19:16]` | `[15:0]` |
 
-**Exemplu:**
-* **ASM:** `ADD R2, R0, R1`
-* **Encoding:** `0001 0010 0000 0001 0000000000000000`
+* **Opcode:** Identifică operația (ex: `0001` pentru ADD).
+* **Dest/Op0/Op1:** Adresele regiștrilor utilizați.
+* **Value:** Valoare imediată pe 16 biți pentru instrucțiuni de tip `VL` (Load Value).
+
+### 🚀 Utilizare Rapidă
+1. **Compilare Assembler:** `g++ main.cpp -o assembler` în folderul `assembler/`.
+2. **Generare Cod:** `./assembler` (citește `test.asm` și exportă `testbench.hex`).
+3. **Simulare:** Deschide proiectul în Vivado și rulează **Behavioral Simulation**.
 
 ---
 
-## Utilizare
+## English
 
-### Compilare și Rulare Assembler
+### 📖 Description
+This project features a processor microarchitecture implemented in **SystemVerilog**, supported by a **custom C++ Assembler**. It provides a full flow from writing assembly code (`.asm`) to generating machine code (`.hex`) for Vivado simulations.
 
-```bash
-# 1. Navighează în folderul assembler
-cd assembler
+### 🛠️ Project Structure
+* **assembler/**: Includes `main.cpp` (the translator source code) and `test.asm`.
+* **vivado/**: Includes SystemVerilog modules (`alu.sv`, `control_block.sv`, `processor.sv`, etc.) and the Xilinx project files.
 
-# 2. Compilează codul C++
-g++ main.cpp -o assembler
+### 📑 Instruction Format (32-bit)
+| Opcode (4b) | Dest (4b) | Op0 (4b) | Op1 (4b) | Value (16b) |
+| :---: | :---: | :---: | :---: | :---: |
+| `[31:28]` | `[27:24]` | `[23:20]` | `[19:16]` | `[15:0]` |
 
-# 3. Rulează executabilul
-# Acesta va citi 'test.asm' și va genera 'testbench.hex' în folderul Vivado
-./assembler
-```
+* **Opcode:** Identifies the operation (e.g., `0001` for ADD).
+* **Dest/Op0/Op1:** Target and source register addresses.
+* **Value:** 16-bit immediate value for `VL` (Load Value) instructions.
 
-**Output așteptat:**
-> Citește test.asm...  
-> Generează ../vivado/uP.sim/sim_1/behav/xsim/testbench.hex...  
-
-### 2. Simulare în Vivado
-
-1.  Deschide fișierul `uP.xpr` în **Xilinx Vivado**.
-2.  În panoul din stânga, apasă pe **Run Simulation** → **Run Behavioral Simulation**.
-3.  Testbench-ul (`testbench.sv`) va încărca automat fișierul `.hex` generat anterior.
-4.  Analizează semnalele în fereastra de waveform pentru a verifica execuția instrucțiunilor.
+### 🚀 Quick Start
+1. **Compile Assembler:** Run `g++ main.cpp -o assembler` inside the `assembler/` folder.
+2. **Generate Hex:** Run `./assembler` to translate `test.asm` into `testbench.hex`.
+3. **Simulation:** Open the project in Vivado and run **Behavioral Simulation**.
 
 ---
 
-## Exemplu de Program (.asm)
-
-Fișierul `test.asm` inclus demonstrează funcționalitățile de bază (încărcare valori, operații aritmetice, salt condiționat).
-
+### 📝 Example Code (.asm)
 ```assembly
-; Program simplu de test pentru Basic Computer
 START:
-    VL R0, 5          ; Încarcă valoarea 5 în R0
-    VL R1, 10         ; Încarcă valoarea 10 în R1
-    ADD R2, R0, R1    ; R2 = R0 + R1 (ar trebui să fie 15)
-    
-    JMPZ STOP         ; Dacă rezultatul anterior e Zero, sari la STOP (nu sare aici)
-    SUB R2, R2, R0    ; R2 = R2 - R0 (15 - 5 = 10)
-
+    VL R0, 5          ; R0 = 5
+    VL R1, 10         ; R1 = 10
+    ADD R2, R0, R1    ; R2 = R0 + R1
+    SUB R2, R2, R0    ; R2 = R2 - R0
 STOP:
-    HALT              ; Oprește execuția
-```
+    HALT              ; Stop execution
